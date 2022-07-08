@@ -1,0 +1,27 @@
+{
+  "name": "part3-fullstackopen",
+  "version": "1.0.0",
+  "description": "part3 fullStackOpen",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martinorue/part3-fullStackOpen.git"
+  },
+  "author": "Martin Orue",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/martinorue/part3-fullStackOpen/issues"
+  },
+  "homepage": "https://github.com/martinorue/part3-fullStackOpen#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
+}
