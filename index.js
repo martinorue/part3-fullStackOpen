@@ -64,10 +64,15 @@ const getRandomInt = max => Math.floor(Math.random() * max)
 
 app.post('/api/persons', (request, response) => {
     const body = request.body
+    const person_exist = persons.filter(p => p.name === body.name);
 
-    if (!body.name) {
+    if (!body.name || !body.number) {
         return response.status(400).json({
-            error: 'name missing'
+            error: 'name and number are required'
+        })
+    } else if (person_exist.length > 0) {
+        return response.status(400).json({
+            error: 'name must be unique'
         })
     }
 
