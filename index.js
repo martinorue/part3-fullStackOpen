@@ -33,6 +33,10 @@ let persons = [
 ]
 morgan.token('body', (req) => JSON.stringify(req.body))
 
+app.get('/', (req, res) => {
+    response.json(persons)
+})
+
 app.get('/api/persons', morgan('tiny'), (request, response) => {
     response.json(persons)
 })
