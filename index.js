@@ -1,7 +1,10 @@
 const express = require('express')
 const app = express()
+const morgan = require('morgan')
 
 app.use(express.json())
+app.use(morgan(':url :method :body'));
+
 
 let persons = [
     {
@@ -25,12 +28,9 @@ let persons = [
         "number": "39-23-6423122"
     }
 ]
+morgan.token('body', (req) => JSON.stringify(req.body))
 
-app.get('/', (request, response) => {
-    response.send('<h1>Hello World!</h1>')
-})
-
-app.get('/api/persons', (request, response) => {
+app.get('/api/persons', morgan('tiny'), (request, response) => {
     response.json(persons)
 })
 
@@ -62,7 +62,7 @@ app.delete('/api/persons/:id', (request, response) => {
 const getRandomInt = max => Math.floor(Math.random() * max)
 
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', morgan('tiny'), (request, response) => {
     const body = request.body
     const person_exist = persons.filter(p => p.name === body.name);
 
