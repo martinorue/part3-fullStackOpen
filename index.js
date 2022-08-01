@@ -2,12 +2,50 @@ const express = require('express')
 const app = express()
 const morgan = require('morgan')
 const cors = require('cors')
+const mongoose = require('mongoose')
 
 
 app.use(express.json())
 app.use(express.static('build'))
 app.use(morgan(':url :method :body'));
 app.use(cors())
+
+
+
+const url = `mongodb+srv://martinorue:${password}@cluster0.5qybt.mongodb.net/agendaApp?retryWrites=true&w=majority`
+
+mongoose.connect(url)
+
+const personSchema = new mongoose.Schema({
+    name: String,
+    number: Number,
+})
+
+const Person = mongoose.model('Person', personSchema)
+
+
+mongoose
+    .connect(url)
+    .then(() => {
+        if (process.argv.length === 3) {
+            Person.find({}).then(result => {
+                console.log('phonebook');
+                result.forEach(person => {
+                    console.log(`${person.name} ${person.number}`);
+                })
+                mongoose.connection.close()
+            }).then(() => mongoose.connection.close())
+        } else {
+            const person = new Person({
+                name: name,
+                number: number
+            })
+            return person.save().then(() => {
+                console.log(`added ${person.name} number ${person.number} to phonebook`)
+                return mongoose.connection.close()
+            })
+        }
+    }).catch((err) => console.log(err))
 
 
 let persons = [
@@ -39,7 +77,9 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/persons', morgan('tiny'), (request, response) => {
-    response.json(persons)
+    Person.find({}).then(persons => {
+        response.json(persons)
+    })
 })
 
 app.get('/api/persons/:id', (request, response) => {
