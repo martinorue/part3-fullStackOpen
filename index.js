@@ -45,31 +45,23 @@ app.delete('/api/persons/:id', (request, response) => {
     response.status(204).end()
 })
 
-const getRandomInt = max => Math.floor(Math.random() * max)
-
 app.post('/api/persons', morgan('tiny'), (request, response) => {
     const body = request.body
-    const person_exist = persons.filter(p => p.name === body.name);
 
     if (!body.name || !body.number) {
         return response.status(400).json({
             error: 'name and number are required'
         })
-    } else if (person_exist.length > 0) {
-        return response.status(400).json({
-            error: 'name must be unique'
-        })
     }
 
-    const person = {
-        id: getRandomInt(Number.MAX_SAFE_INTEGER),
+    const person = new Person({
         name: body.name,
         number: body.number
-    }
+    })
 
-    persons = persons.concat(person)
-
-    response.json(person)
+    person.save().then(savedPerson => {
+        response.json(savedPerson)
+    })
 })
 
 const unknownEndpoint = (request, response) => {
