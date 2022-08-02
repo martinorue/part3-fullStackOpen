@@ -4,6 +4,7 @@ const morgan = require('morgan')
 const cors = require('cors')
 require('dotenv').config()
 const Person = require('./models/person')
+const { response } = require('express')
 
 const requestLogger = (request, response, next) => {
     console.log('Method:', request.method)
@@ -74,6 +75,21 @@ app.post('/api/persons', morgan('tiny'), (request, response) => {
     person.save().then(savedPerson => {
         response.json(savedPerson)
     }).catch(error => next(error))
+})
+
+app.put('api/persons/:id', (request, response, next) => {
+    const body = request.body
+
+    const person = {
+        name: body.name,
+        number: body.number
+    }
+
+    Person.findByIdAndUpdate(request.params.id, person, { new: true })
+        .then(updatedPerson => {
+            response.json(updatedPerson)
+        })
+        .catch(error => next(error))
 })
 
 const unknownEndpoint = (request, response) => {
