@@ -13,6 +13,12 @@ const requestLogger = (request, response, next) => {
     next()
 }
 
+const unknownEndpoint = (request, response) => {
+    response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
+
 app.use(express.json())
 app.use(requestLogger)
 app.use(express.static('build'))
@@ -73,11 +79,6 @@ app.post('/api/persons', morgan('tiny'), (request, response) => {
     })
 })
 
-const unknownEndpoint = (request, response) => {
-    response.status(404).send({ error: 'unknown endpoint' })
-}
-
-app.use(unknownEndpoint)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
