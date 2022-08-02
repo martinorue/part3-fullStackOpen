@@ -46,7 +46,8 @@ app.get('/info', (request, response) => {
     Person.find({}).then(persons => {
         response.send(
             `<h1>Phonebook has info for ${persons.length} people</h1>
-            <h2>${new Date()}</h2>`)
+            <h2>${new Date()}</h2>`
+        )
     }).catch(error => next(error))
 })
 
