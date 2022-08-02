@@ -28,13 +28,14 @@ app.get('/api/persons/:id', (request, response) => {
                 response.status(404).end()
             }
         })
-
 })
 
 app.get('/info', (request, response) => {
-    response.send(
-        `<h1>Phonebook has info for ${persons.length} people</h1>
-        <h2>${new Date()}</h2>`)
+    Person.find({}).then(persons => {
+        response.send(
+            `<h1>Phonebook has info for ${persons.length} people</h1>
+            <h2>${new Date()}</h2>`)
+    })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
