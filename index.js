@@ -77,7 +77,7 @@ app.post('/api/persons', morgan('tiny'), (request, response) => {
     }).catch(error => next(error))
 })
 
-app.put('api/persons/:id', (request, response, next) => {
+app.put('/api/persons/:id', (request, response, next) => {
     const body = request.body
 
     const person = {
