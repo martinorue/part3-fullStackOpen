@@ -60,7 +60,7 @@ app.delete('/api/persons/:id', (request, response) => {
 })
 
 app.post('/api/persons', morgan('tiny'), (request, response) => {
-    const body = request.body
+    const { name, number } = request.body
 
     // if (!body.name || !body.number) {
     //     return response.status(400).json({
@@ -68,14 +68,23 @@ app.post('/api/persons', morgan('tiny'), (request, response) => {
     //     }).catch(error => next(error))
     // }
 
-    const person = new Person({
-        name: body.name,
-        number: body.number
-    })
+    const person_exist = Person.findOne({ name: new RegExp('^' + name + '$', "i") })
 
-    person.save().then(savedPerson => {
-        response.json(savedPerson)
-    }).catch(error => next(error))
+    if (person_exist) {
+        return response.status(400).json({
+            error: `Person with name ${name} is already added to phonebook`
+        })
+    } else {
+        const person = new Person({
+            name: name,
+            number: number
+        })
+
+        person.save().then(savedPerson => {
+            response.json(savedPerson)
+        }).catch(error => next(error))
+    }
+
 
 })
 
