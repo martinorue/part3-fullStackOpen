@@ -16,17 +16,19 @@ mongoose.connect(url)
 const personSchema = new mongoose.Schema({
     name: {
         type: String,
-        minLength: 3,
-        required: true
+        minLength: [3, '{VALUE} is shorter than the minimum allowed length (3)'],
+        required: [true, "User name required"],
+        unique: [true, 'Person with name {VALUE} is already added to phonebook']
     },
     number: {
+        type: String,
         minLength: 8,
         required: true,
-        validate: {
-            validator: function (v) {
-                return /(^[0-9]{2,3}-{1}[0-9]\d)\w/.test(v);
-            }
-        }
+        // validate: {
+        //     validator: function (v) {
+        //         return /(^[0-9]{2,3}-{1}[0-9]\d)\w/.test(v);
+        //     }
+        // }
     }
 })
 

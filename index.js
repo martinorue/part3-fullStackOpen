@@ -59,7 +59,7 @@ app.delete('/api/persons/:id', (request, response) => {
         .catch(error => next(error))
 })
 
-app.post('/api/persons', morgan('tiny'), (request, response) => {
+app.post('/api/persons', morgan('tiny'), (request, response, next) => {
     const { name, number } = request.body
 
     // if (!body.name || !body.number) {
@@ -68,13 +68,13 @@ app.post('/api/persons', morgan('tiny'), (request, response) => {
     //     }).catch(error => next(error))
     // }
 
-    const person_exist = Person.findOne({ name: new RegExp('^' + name + '$', "i") })
+    // const person_exist = Person.findOne({ name: new RegExp('^' + name + '$', "i") })
 
-    if (person_exist) {
-        return response.status(400).json({
-            error: `Person with name ${name} is already added to phonebook`
-        })
-    } else {
+    // if (person_exist) {
+    //     return response.status(400).json({
+    //         error: `Person with name ${name} is already added to phonebook`
+    //     })
+    // } else {
         const person = new Person({
             name: name,
             number: number
@@ -83,7 +83,7 @@ app.post('/api/persons', morgan('tiny'), (request, response) => {
         person.save().then(savedPerson => {
             response.json(savedPerson)
         }).catch(error => next(error))
-    }
+    // }
 
 
 })
@@ -112,6 +112,9 @@ const errorHandler = (error, request, response, next) => {
 
     if (error.name === 'CastError') {
         return response.status(400).send({ error: 'malformatted id' })
+    }else if(error.name === 'ValidationError'){
+        console.log(error.name)
+        return response.status(400).json({error: error.message})
     }
 
     next(error)
