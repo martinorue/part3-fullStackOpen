@@ -62,11 +62,11 @@ app.delete('/api/persons/:id', (request, response) => {
 app.post('/api/persons', morgan('tiny'), (request, response) => {
     const body = request.body
 
-    if (!body.name || !body.number) {
-        return response.status(400).json({
-            error: 'name and number are required'
-        }).catch(error => next(error))
-    }
+    // if (!body.name || !body.number) {
+    //     return response.status(400).json({
+    //         error: 'name and number are required'
+    //     }).catch(error => next(error))
+    // }
 
     const person = new Person({
         name: body.name,
@@ -76,6 +76,7 @@ app.post('/api/persons', morgan('tiny'), (request, response) => {
     person.save().then(savedPerson => {
         response.json(savedPerson)
     }).catch(error => next(error))
+
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
