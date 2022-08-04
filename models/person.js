@@ -5,7 +5,7 @@ const url = process.env.MONGODB_URI
 console.log('connecting to', url)
 
 mongoose.connect(url)
-    .then(result => {
+    .then(() => {
         console.log('connected to MongoDB')
     })
     .catch((error) => {
@@ -17,7 +17,7 @@ const personSchema = new mongoose.Schema({
     name: {
         type: String,
         minLength: [3, '{VALUE} is shorter than the minimum allowed length (3)'],
-        required: [true, "User name required"],
+        required: [true, 'User name required'],
         unique: [true, 'Person with name {VALUE} is already added to phonebook']
     },
     number: {
@@ -26,7 +26,7 @@ const personSchema = new mongoose.Schema({
         required: true,
         validate: {
             validator: function (v) {
-                return /(^[0-9]{2,3}-{1}[0-9]\d)\w/.test(v);
+                return /(^[0-9]{2,3}-{1}[0-9]\d)\w/.test(v)
             }
         }
     }

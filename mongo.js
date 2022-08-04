@@ -22,15 +22,15 @@ const Person = mongoose.model('Person', personSchema)
 mongoose
     .connect(url)
     .then(() => {
-        if(process.argv.length === 3){
+        if (process.argv.length === 3) {
             Person.find({}).then(result => {
-                console.log('phonebook');
+                console.log('phonebook')
                 result.forEach(person => {
-                    console.log(`${person.name} ${person.number}` );
+                    console.log(`${person.name} ${person.number}`)
                 })
                 mongoose.connection.close()
             }).then(() => mongoose.connection.close())
-        }else{
+        } else {
             const person = new Person({
                 name: name,
                 number: number
@@ -40,4 +40,4 @@ mongoose
                 return mongoose.connection.close()
             })
         }
-        }).catch((err) => console.log(err))
+    }).catch((err) => console.log(err))

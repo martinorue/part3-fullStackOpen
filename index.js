@@ -4,9 +4,8 @@ const morgan = require('morgan')
 const cors = require('cors')
 require('dotenv').config()
 const Person = require('./models/person')
-const { response } = require('express')
 
-const requestLogger = (request, response, next) => {
+const requestLogger = (request, next) => {
     console.log('Method:', request.method)
     console.log('Path:  ', request.path)
     console.log('Body:  ', request.body)
@@ -18,18 +17,18 @@ const requestLogger = (request, response, next) => {
 app.use(express.json())
 app.use(requestLogger)
 app.use(express.static('build'))
-app.use(morgan(':url :method :body'));
+app.use(morgan(':url :method :body'))
 app.use(cors())
 
 morgan.token('body', (req) => JSON.stringify(req.body))
 
-app.get('/api/persons', morgan('tiny'), (request, response) => {
+app.get('/api/persons', morgan('tiny'), (response, next) => {
     Person.find({}).then(persons => {
         response.json(persons)
     }).catch(error => next(error))
 })
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
 
     Person.findById(request.params.id)
         .then(person => {
@@ -42,7 +41,7 @@ app.get('/api/persons/:id', (request, response) => {
         .catch(error => next(error))
 })
 
-app.get('/info', (request, response) => {
+app.get('/info', (request, response, next) => {
     Person.find({}).then(persons => {
         response.send(
             `<h1>Phonebook has info for ${persons.length} people</h1>
@@ -51,9 +50,9 @@ app.get('/info', (request, response) => {
     }).catch(error => next(error))
 })
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
     Person.findByIdAndRemove(request.params.id)
-        .then(result => {
+        .then(() => {
             response.status(204).end()
         })
         .catch(error => next(error))
