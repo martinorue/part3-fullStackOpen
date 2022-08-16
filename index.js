@@ -5,14 +5,13 @@ const cors = require('cors')
 require('dotenv').config()
 const Person = require('./models/person')
 
-const requestLogger = (request, next) => {
+const requestLogger = (request, response, next) => {
     console.log('Method:', request.method)
     console.log('Path:  ', request.path)
     console.log('Body:  ', request.body)
     console.log('---')
     next()
 }
-
 
 app.use(express.json())
 app.use(requestLogger)
@@ -22,7 +21,7 @@ app.use(cors())
 
 morgan.token('body', (req) => JSON.stringify(req.body))
 
-app.get('/api/persons', morgan('tiny'), (response, next) => {
+app.get('/api/persons', morgan('tiny'), (request, response, next) => {
     Person.find({}).then(persons => {
         response.json(persons)
     }).catch(error => next(error))
